@@ -1,0 +1,23 @@
+FROM osrf/ros:humble-desktop
+
+# Installing the necessary dependencies
+RUN apt-get update && apt-get install python3-pip ros-humble-ament-clang-format ros-humble-ament-cmake-clang-format software-properties-common -y
+
+# Configuring the python 3.9 virtualenv 
+RUN add-apt-repository ppa:deadsnakes/ppa \
+	&& apt-get update \
+	&& apt-get install -y python3.9 python3.9-dev python3-pip python3.9-distutils \
+	&& pip3 install virtualenv \
+	&& virtualenv -p /usr/bin/python3.9 py39
+
+# Installing the optitrack driver
+
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash \
+	&& source py39/bin/activate \
+	&& pip3 install requests numpy empy lark \
+	&& mkdir -p ~/mocap_ws/src && cd ~/mocap_ws/src \
+	&& git clone https://github.com/MOCAP4ROS2-Project/mocap4ros2_optitrack.git \
+	&& vcs import < mocap4ros2_optitrack/dependency_repos.repos \
+	&& cd .. && rosdep install --from-paths src --ignore-src -r -y \
+	&& colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF"
+
