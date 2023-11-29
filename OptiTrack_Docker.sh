@@ -1,5 +1,4 @@
 #!/bin/bash
-# Bash Menu Script Example
 echo $'\nAvailable options for ROS2 OptiTrack docker image: \n'
 PS3='Please choose what : '
 options=("Build" "Run" "Quit")
