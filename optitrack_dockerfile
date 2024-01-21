@@ -41,3 +41,4 @@ RUN /bin/bash -c "source /opt/ros/humble/setup.bash \
 
 RUN apt-get install net-tools iputils-ping
 
+COPY start_optitrack.sh /
