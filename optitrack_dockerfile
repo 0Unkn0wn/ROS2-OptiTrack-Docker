@@ -1,23 +1,43 @@
 FROM osrf/ros:humble-desktop
 
 # Installing the necessary dependencies
-RUN apt-get update && apt-get install python3-pip ros-humble-ament-clang-format ros-humble-ament-cmake-clang-format software-properties-common -y
+RUN apt-get update && apt-get install vim python3-pip ros-humble-ament-clang-format ros-humble-ament-cmake-clang-format software-properties-common -y
+
+RUN printf 'export ROS_DOMAIN_ID=41 \n export ROS_MASTER_URI=http://192.168.0.105:11311\n export ROS_IP=192.168.0.170\n export ROS_HOSTNAME=192.168.0.170'>> ~/.bashrc
 
 # Configuring the python 3.9 virtualenv 
 RUN add-apt-repository ppa:deadsnakes/ppa \
-	&& apt-get update \
-	&& apt-get install -y python3.9 python3.9-dev python3-pip python3.9-distutils \
-	&& pip3 install virtualenv \
-	&& virtualenv -p /usr/bin/python3.9 py39
+        && apt-get update \
+        && apt-get install -y python3.9 python3.9-dev python3-pip python3.9-distutils \
+        && pip3 install virtualenv \
+        && virtualenv -p /usr/bin/python3.9 py39
 
-# Installing the optitrack driver
+# Installing the optitrack driver ----- this one has custom messages => harder to work with
+
+#RUN /bin/bash -c "source opt/ros/humble/setup.bash \
+#       && pip3 install requests numpy empy lark \
+#       && mkdir -p ~/mocap_ws/src && cd ~/mocap_ws/src \
+#       && git clone https://github.com/0Unkn0wn/mocap4ros2_optitrack.git \
+#       && cd mocap4ros2_optitrack \
+#       && git fetch --all \
+#       && git branch \ 
+#       && git checkout dean/upstream_maintenance \
+#       && cd .. \
+#       && vcs import < mocap4ros2_optitrack/dependency_repos.repos \
+#       && cd .. && rosdep install --from-paths src --ignore-src -r -y \
+#       && colcon build --symlink-install"
+
+# Installing another version of the driver -------- this one has no custom messages => easier to work with
 
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash \
-	&& source py39/bin/activate \
-	&& pip3 install requests numpy empy lark \
-	&& mkdir -p ~/mocap_ws/src && cd ~/mocap_ws/src \
-	&& git clone https://github.com/MOCAP4ROS2-Project/mocap4ros2_optitrack.git \
-	&& vcs import < mocap4ros2_optitrack/dependency_repos.repos \
-	&& cd .. && rosdep install --from-paths src --ignore-src -r -y \
-	&& colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF"
+        && mkdir -p ~/opti_ws/src && cd ~/opti_ws/src \
+        && git clone https://github.com/0Unkn0wn/mocap_optitrack-release \
+        && cd mocap_optitrack-release \
+        && git fetch --all \
+        && git checkout debian/humble/mocap_optitrack \
+        && cd .. \
+        && cd .. && rosdep install --from-paths src --ignore-src -r -y \
+        && colcon build --symlink-install"
+
+RUN apt-get install net-tools iputils-ping
 
