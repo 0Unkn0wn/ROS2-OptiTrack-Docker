@@ -4,7 +4,7 @@ Dockerfile for running the ROS2 OptiTrack driver
 This repository contains:
 1. A Dockerfile with ROS2 and the [OptiTrack ROS2 driver](https://github.com/MOCAP4ROS2-Project/mocap4ros2_optitrack).
 2. A script for building and running the container.
-
+3. A script to start the driver once inside the container.
 The base container is taken from [here](https://docs.ros.org/en/humble/How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers.html).
 
 First, make sure that X11 settings are properly set:
