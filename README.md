@@ -13,12 +13,12 @@ To build the repo locally: clone the repo and run the script and it will build i
 (new way)
 Pull the image from the repo directly:
 ```
-docker pull 
+docker pull ghcr.io/0unkn0wn/ros2-optitrack-docker:latest
 ```
 
 And run it with:
 ```
-docker run 
+docker run -it --hostname optitrack-docker --privileged --net=host --name=Optitrack -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix ghcr.io/0unkn0wn/ros2-optitrack-docker:latest bin/bash 
 ```
 
 First, make sure that X11 settings are properly set:
