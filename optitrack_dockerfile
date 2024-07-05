@@ -3,7 +3,7 @@ FROM osrf/ros:humble-desktop
 # Installing the necessary dependencies
 RUN apt-get update && apt-get install vim python3-pip ros-humble-ament-clang-format ros-humble-ament-cmake-clang-format software-properties-common -y
 
-RUN printf 'export ROS_DOMAIN_ID=41 \n export ROS_MASTER_URI=http://192.168.0.105:11311\n export ROS_IP=192.168.0.170\n export ROS_HOSTNAME=192.168.0.170'>> ~/.bashrc
+#RUN printf 'export ROS_DOMAIN_ID=41 \n export ROS_MASTER_URI=http://192.168.0.105:11311\n export ROS_IP=192.168.0.170\n export ROS_HOSTNAME=192.168.0.170'>> ~/.bashrc
 
 # Configuring the python 3.9 virtualenv 
 RUN add-apt-repository ppa:deadsnakes/ppa \
